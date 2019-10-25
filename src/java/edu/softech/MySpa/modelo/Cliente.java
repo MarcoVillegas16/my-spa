@@ -14,8 +14,12 @@ public class Cliente extends Persona {
     private int idCliente;
     private String correoE;
 
-    public Cliente(int idCliente, String correoE, int idPersona, String nombre, String apellidoPaterno, String apellidoMaterno, String genero, String telefonoCelular, String telefonoCasa, String rfc, Usuario usuario, Domicilio domicilio) {
-        super(idPersona, nombre, apellidoPaterno, apellidoMaterno, genero, telefonoCelular, telefonoCasa, rfc, usuario, domicilio);
+    public Cliente(int idCliente, String correoE, int idPersona, String nombre, 
+            String apellidoPaterno, String apellidoMaterno, String genero, 
+            String telefonoCelular, String telefonoCasa, String rfc, 
+            Usuario usuario, Domicilio domicilio) {
+        super(idPersona, nombre, apellidoPaterno, apellidoMaterno, genero, 
+                telefonoCelular, telefonoCasa, rfc, usuario, domicilio);
         this.idCliente = idCliente;
         this.correoE = correoE;
     }
