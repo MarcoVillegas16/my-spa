@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response;
  * @author marco
  */
 @Path("cliente")
-public class VIstaCliente extends Application {
+public class VistaCliente extends Application {
 
     String respuesta;
 
