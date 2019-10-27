@@ -37,16 +37,14 @@ public class VistaCliente extends Application {
             @QueryParam("rfc") String rfc,
             @QueryParam("nombreUsuario") String nombreUsuario,
             @QueryParam("contrasenia") String contrasenia,
-            @QueryParam("puesto") String puesto,
-            @QueryParam("estatusUsuario") String estatusUsuario,
             @QueryParam("calle") String calle,
             @QueryParam("numeroCasa") String numeroCasa,
             @QueryParam("colonia") String colonia) {
 
         Domicilio domicilio = new Domicilio(0, calle, numeroCasa, colonia);
 
-        Usuario usuario = new Usuario(0, nombreUsuario, contrasenia, puesto,
-                estatusUsuario);
+        Usuario usuario = new Usuario(0, nombreUsuario, contrasenia, "cliente",
+                "activo");
 
         Cliente cliente = new Cliente(0, nombreUsuario, 0, nombre, apellidoPaterno,
                 apellidoMaterno, genero, telefonoCelular, telefonoCasa, rfc,
