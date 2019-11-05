@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/marco/NetBeansProjects/MySpa/web/WEB-INF/web.xml</file>
-            <file>file:/home/marco/NetBeansProjects/MySpa/src/java/edu/softech/MySpa/vista/VistaCliente.java</file>
+            <file>file:/home/marco/NetBeansProjects/MySpa/src/java/edu/softech/MySpa/controlador/validarDatos/ControladorCliente.java</file>
+            <file>file:/home/marco/NetBeansProjects/MySpa/src/java/edu/softech/MySpa/modelo/Cliente.java</file>
+            <file>file:/home/marco/NetBeansProjects/MySpa/src/java/edu/softech/MySpa/controlador/VistaCliente.java</file>
+            <file>file:/home/marco/NetBeansProjects/MySpa/src/java/edu/softech/MySpa/baseDatos/comandos/comandosCliente.java</file>
         </group>
     </open-files>
 </project-private>

@@ -10,19 +10,17 @@ package edu.softech.MySpa.modelo;
  * @author marco
  */
 public class Usuario {
-    
+
     private int idUsuario;
     private String nombreUsuario;
     private String contrasenia;
-    private String puesto;
-    private String estatusUsuario;
+    private String rol;
 
-    public Usuario(int idUsuario, String nombreUsuario, String contrasenia, String puesto, String estatusUsuario) {
+    public Usuario(int idUsuario, String nombreUsuario, String contrasenia, String rol) {
         this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.contrasenia = contrasenia;
-        this.puesto = puesto;
-        this.estatusUsuario = estatusUsuario;
+        this.rol = rol;
     }
 
     public int getIdUsuario() {
@@ -49,21 +47,12 @@ public class Usuario {
         this.contrasenia = contrasenia;
     }
 
-    public String getPuesto() {
-        return puesto;
+    public String getRol() {
+        return rol;
     }
 
-    public void setPuesto(String puesto) {
-        this.puesto = puesto;
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
-    public String getEstatusUsuario() {
-        return estatusUsuario;
-    }
-
-    public void setEstatusUsuario(String estatusUsuario) {
-        this.estatusUsuario = estatusUsuario;
-    }
-    
-    
 }

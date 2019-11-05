@@ -16,23 +16,21 @@ public class Persona {
     private String apellidoPaterno;
     private String apellidoMaterno;
     private String genero;
-    private String telefonoCelular;
-    private String telefonoCasa;
+    private String domicilio;
+    private String telefono;
     private String rfc;
     private Usuario usuario;
-    private Domicilio domicilio;
 
-    public Persona(int idPersona, String nombre, String apellidoPaterno, String apellidoMaterno, String genero, String telefonoCelular, String telefonoCasa, String rfc, Usuario usuario, Domicilio domicilio) {
+    public Persona(int idPersona, String nombre, String apellidoPaterno, String apellidoMaterno, String genero, String domicilio, String telefono, String rfc, Usuario usuario) {
         this.idPersona = idPersona;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.genero = genero;
-        this.telefonoCelular = telefonoCelular;
-        this.telefonoCasa = telefonoCasa;
+        this.domicilio = domicilio;
+        this.telefono = telefono;
         this.rfc = rfc;
         this.usuario = usuario;
-        this.domicilio = domicilio;
     }
 
     public int getIdPersona() {
@@ -75,20 +73,20 @@ public class Persona {
         this.genero = genero;
     }
 
-    public String getTelefonoCelular() {
-        return telefonoCelular;
+    public String getDomicilio() {
+        return domicilio;
     }
 
-    public void setTelefonoCelular(String telefonoCelular) {
-        this.telefonoCelular = telefonoCelular;
+    public void setDomicilio(String domicilio) {
+        this.domicilio = domicilio;
     }
 
-    public String getTelefonoCasa() {
-        return telefonoCasa;
+    public String getTelefono() {
+        return telefono;
     }
 
-    public void setTelefonoCasa(String telefonoCasa) {
-        this.telefonoCasa = telefonoCasa;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     public String getRfc() {
@@ -105,14 +103,6 @@ public class Persona {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    public Domicilio getDomicilio() {
-        return domicilio;
-    }
-
-    public void setDomicilio(Domicilio domicilio) {
-        this.domicilio = domicilio;
     }
 
 }

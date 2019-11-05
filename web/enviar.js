@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-let url = 'http://localhost:8084/MySpa/api/cliente?';
+let url;
 
 
 let variables = [
@@ -12,43 +12,65 @@ let variables = [
     document.getElementById('apellidoPaterno'),
     document.getElementById('apellidoMaterno'),
     document.getElementById('genero'),
-    document.getElementById('telefonoCelular'),
-    document.getElementById('telefonoCasa'),
+    document.getElementById('telefono'),
     document.getElementById('rfc'),
     document.getElementById('nombreUsuario'),
+    document.getElementById('correo'),
     document.getElementById('contrasenia'),
-    document.getElementById('calle'),
-    document.getElementById('numeroCasa'),
-    document.getElementById('colonia')
+    document.getElementById('domicilio')
 
 ];
 
 let generarUrl = () => {
+    url = 'http://localhost:8084/MySpa/api/cliente?';
     variables.forEach(currentValue => {
         url += `${currentValue.id}=${currentValue.value}&`;// http://localhost:8084/MySpa/api/cliente?nombre=Juan&...
     });
-    url = url.slice(0, -1);//Quitamos el ultimo & del enlace
-
+    url = url.slice(0, -1);//Quitamos el ultimo & del enlace  
     return url;
 };
 
 document.getElementById("btn-registrar-cliente").addEventListener('click', () => {
     let enlace = generarUrl();
 
-    hacerPeticionAjax(enlace);
+    hacerPeticion(enlace, 'POST');
 });
 
-let hacerPeticionAjax = enlace => {
-    const http = new XMLHttpRequest();
+let hacerPeticion = (enlace, metodo) => {
 
-    http.open("GET", enlace);
+    const http = new XMLHttpRequest();
+    var resultado;
+
+    http.open(metodo, enlace);
     http.onreadystatechange = function () {
 
         if (this.readyState === 4 && this.status === 200) {
-            var resultado = JSON.parse(this.responseText);
+            //console.log(this.responseText);
+            resultado = JSON.parse(this.responseText);
             console.log(resultado);
         }
     };
     http.send();
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -25,22 +25,18 @@
             <input type="text" name="apellidoMaterno" id="apellidoMaterno">
             <p>genero</p>
             <input type="text" name="genero" id="genero">
-            <p>telefonoCelular</p>
-            <input type="text" name="telefonoCelular" id="telefonoCelular">
-            <p>telefonoCasa</p>
-            <input type="text" name="telefonoCasa" id="telefonoCasa">
+            <p>telefono</p>
+            <input type="text" name="telefono" id="telefono">
             <p>rfc</p>
             <input type="text" name="rfc" id="rfc">
             <p>nombreUsuario</p>
             <input type="text" name="nombreUsuario" id="nombreUsuario">
+            <p>correo</p>
+            <input type="text" name="correo" id="correo">
             <p>contrasenia</p>
             <input type="text" name="contrasenia" id="contrasenia">
-            <p>calle</p>
-            <input type="text" name="calle" id="calle">
-            <p>numeroCasa</p>
-            <input type="text" name="numeroCasa" id="numeroCasa">
-            <p>colonia</p>
-            <input type="text" name="colonia" id="colonia">
+            <p>domicilio</p>
+            <input type="text" name="domicilio" id="domicilio">
             <input type="button" id="btn-registrar-cliente">
         </form>
         <script type="text/javascript" src="enviar.js"></script>
