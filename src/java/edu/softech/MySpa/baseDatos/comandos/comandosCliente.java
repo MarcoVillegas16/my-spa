@@ -12,6 +12,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  *
@@ -44,7 +49,7 @@ public class comandosCliente {
         return aprobado;
     }
 
-    public Cliente registrarCliente(Cliente c) throws SQLException, Exception {
+    public Cliente registrarCliente(Cliente c, int opcion) throws SQLException, Exception {
         Usuario u = c.getUsuario();
 
         if (!validarCliente(c)) {
@@ -76,20 +81,34 @@ public class comandosCliente {
 
         rs = ps.executeQuery();
 
-        c = buscarCliente(c);
+        c = buscarCliente(c, opcion);
 
         conn.Desconectar();
 
         return c;
     }
 
-    public Cliente buscarCliente(Cliente c) throws SQLException, Exception {
+    public Cliente buscarCliente(Cliente c, int opcion) throws SQLException, Exception {
+
         Usuario u = c.getUsuario();
+        query = "SELECT * FROM v_buscarCliente WHERE ";
 
-        query = "SELECT * FROM v_buscarCliente WHERE nombreUsuario=?";
-        ps = conn.getConexión().prepareStatement(query);
+        conn.Conectar();
 
-        ps.setString(1, u.getNombreUsuario());
+        switch (opcion) {
+            case 1:
+                query += "nombreUsuario LIKE ?";
+                ps = conn.getConexión().prepareStatement(query);
+                ps.setString(1, u.getNombreUsuario());
+                break;
+            case 2:
+                query += "numeroUnico=?";
+                ps = conn.getConexión().prepareStatement(query);
+                ps.setString(1, "" + c.getNumeroUnico());
+                break;
+            default:
+                return null;
+        }
 
         rs = ps.executeQuery();
 
@@ -108,6 +127,86 @@ public class comandosCliente {
         conn.Desconectar();
 
         return c;
+    }
+
+    public Queue buscarClientes() throws SQLException, Exception {
+        Cliente c = null;
+        Usuario u = null;
+        Queue clientes = new LinkedList<Cliente>();
+        query = "SELECT * FROM v_buscarCliente";
+
+        conn.Conectar();
+
+        ps = conn.getConexión().prepareStatement(query);
+
+        rs = ps.executeQuery();
+
+        u = null;
+        c = null;
+
+        while (rs.next()) {
+            u = new Usuario(rs.getInt("idUsuario"), rs.getString("nombreUsuario"),
+                    rs.getString("contrasenia"), rs.getString("rol"));
+            c = new Cliente(rs.getInt("idCliente"), rs.getString("numeroUnico"),
+                    rs.getString("correo"), rs.getInt("estatus"), rs.getInt("idPersona"),
+                    rs.getString("nombre"), rs.getString("apellidoPaterno"),
+                    rs.getString("apellidoMaterno"), rs.getString("genero"),
+                    rs.getString("domicilio"), rs.getString("telefono"),
+                    rs.getString("rfc"), u);
+            clientes.add(c);
+
+        }
+
+        conn.Desconectar();
+
+        return clientes;
+    }
+
+    public Cliente actualizarCliente(Cliente c, int opcion) throws SQLException, Exception {
+        Usuario u = c.getUsuario();
+        query = "call actualizarCliente( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
+                + "@uno,@dos,@tres)";
+
+        conn.Conectar();
+
+        ps = conn.getConexión().prepareStatement(query);
+
+        ps.setString(1, c.getNombre());
+        ps.setString(2, c.getApellidoPaterno());
+        ps.setString(3, c.getApellidoMaterno());
+        ps.setString(4, c.getGenero());
+        ps.setString(5, c.getDomicilio());
+        ps.setString(6, c.getTelefono());
+        ps.setString(7, c.getRfc());
+        ps.setString(8, u.getNombreUsuario());
+        ps.setString(9, u.getContrasenia());
+        ps.setString(10, c.getNumeroUnico());
+        ps.setString(11, c.getCorreo());
+
+        rs = ps.executeQuery();
+
+        c = buscarCliente(c, opcion);
+
+        return c;
+    }
+
+    public boolean borrarCliente(Cliente c) throws SQLException, Exception {
+        boolean respuesta = false;
+
+        query = "call eliminarCliente(?,@uno)";
+
+        conn.Conectar();
+
+        ps = conn.getConexión().prepareStatement(query);
+
+        ps.setString(1, c.getNumeroUnico());
+
+        rs = ps.executeQuery();
+
+        respuesta = true;
+
+        return respuesta;
+
     }
 
 }

@@ -10,6 +10,7 @@ import edu.softech.MySpa.modelo.Cliente;
 import edu.softech.MySpa.modelo.Usuario;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -28,22 +29,36 @@ public class ControladorCliente {
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
     Matcher matcher;
 
-    public Cliente crearCliente(ArrayList datos) {
+    public Cliente crearCliente(ArrayList datos, int opcion) {
         Cliente c = null;
         int acum = 0;
         try {
 
             if (validarDatosObligatorio(datos)) {
                 if (validarDatos(datos)) {
-                    c = crearObjCliente(datos);
-                    c = comC.registrarCliente(c);
+                    c = crearObjCliente(datos, opcion);
+
+                    switch (opcion) {
+                        case 1:
+                            c = comC.registrarCliente(c, 1);
+                            break;
+                        case 2:
+                            if (c.getNumeroUnico().length() == 15) {
+                                c = comC.actualizarCliente(c, 2);
+                            } else {
+                                return null;
+                            }
+                            break;
+                    }
 
                 }
             }
 
         } catch (SQLException ex) {
+            c = null;
             Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
+            c = null;
             Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
         return c;
@@ -96,7 +111,7 @@ public class ControladorCliente {
         return false;
     }
 
-    public Cliente crearObjCliente(ArrayList datos) {
+    public Cliente crearObjCliente(ArrayList datos, int opcion) {
 
         Usuario u = new Usuario(0, (String) datos.get(6), (String) datos.get(8),
                 "Cliente");
@@ -104,7 +119,51 @@ public class ControladorCliente {
                 (String) datos.get(1), (String) datos.get(2), (String) datos.get(3),
                 (String) datos.get(9), (String) datos.get(4), (String) datos.get(5),
                 u);
-
+        switch (opcion) {
+            case 1:
+                break;
+            case 2:
+                c.setNumeroUnico((String) datos.get(10));
+                break;
+        }
         return c;
+    }
+
+    public boolean borrarCliente(ArrayList datos) throws Exception {
+
+        boolean respuesta = false;
+        Usuario u = new Usuario(0, (String) datos.get(1), "", "");
+
+        Cliente c = new Cliente(0, (String) datos.get(0), "", 0, 0, "", "", "", "", "", "", "", u);
+
+        Cliente c1 = comC.buscarCliente(c, 1);
+
+        Cliente c2 = comC.buscarCliente(c, 2);
+
+        if (c1.getIdCliente() == c2.getIdCliente()) {
+            respuesta = comC.borrarCliente(c1);
+        }
+
+        return respuesta;
+    }
+
+    public Cliente buscarCliente(ArrayList datos, int opcion) throws Exception {
+
+        Usuario u = new Usuario(0, (String) datos.get(0), (String) datos.get(1), "");
+        Cliente c = new Cliente(0, "", 0, 0, "", "", "", "", "", "", "", u);
+
+        c = comC.buscarCliente(c, opcion);
+        u = c.getUsuario();
+
+        if (u.getContrasenia().equals(datos.get(1)) && c.getEstatus() != 0 && u.getRol().equals("Cliente")) {
+            return c;
+        }
+
+        return null;
+    }
+
+    public Queue buscarClientes() throws Exception {
+
+        return comC.buscarClientes();
     }
 }
