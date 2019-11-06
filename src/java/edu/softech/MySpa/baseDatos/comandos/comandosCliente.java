@@ -118,12 +118,14 @@ public class comandosCliente {
 
         u = new Usuario(rs.getInt("idUsuario"), rs.getString("nombreUsuario"),
                 rs.getString("contrasenia"), rs.getString("rol"));
+
         c = new Cliente(rs.getInt("idCliente"), rs.getString("numeroUnico"),
-                rs.getString("correo"), rs.getInt("estatus"), rs.getInt("idPersona"),
+                rs.getString("correo"), rs.getInt("estatus"), u, rs.getInt("idPersona"),
                 rs.getString("nombre"), rs.getString("apellidoPaterno"),
                 rs.getString("apellidoMaterno"), rs.getString("genero"),
                 rs.getString("domicilio"), rs.getString("telefono"),
-                rs.getString("rfc"), u);
+                rs.getString("rfc"));
+
         conn.Desconectar();
 
         return c;
@@ -148,11 +150,11 @@ public class comandosCliente {
             u = new Usuario(rs.getInt("idUsuario"), rs.getString("nombreUsuario"),
                     rs.getString("contrasenia"), rs.getString("rol"));
             c = new Cliente(rs.getInt("idCliente"), rs.getString("numeroUnico"),
-                    rs.getString("correo"), rs.getInt("estatus"), rs.getInt("idPersona"),
+                    rs.getString("correo"), rs.getInt("estatus"), u, rs.getInt("idPersona"),
                     rs.getString("nombre"), rs.getString("apellidoPaterno"),
                     rs.getString("apellidoMaterno"), rs.getString("genero"),
                     rs.getString("domicilio"), rs.getString("telefono"),
-                    rs.getString("rfc"), u);
+                    rs.getString("rfc"));
             clientes.add(c);
 
         }

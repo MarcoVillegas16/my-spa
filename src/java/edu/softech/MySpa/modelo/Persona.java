@@ -19,9 +19,8 @@ public class Persona {
     private String domicilio;
     private String telefono;
     private String rfc;
-    private Usuario usuario;
 
-    public Persona(int idPersona, String nombre, String apellidoPaterno, String apellidoMaterno, String genero, String domicilio, String telefono, String rfc, Usuario usuario) {
+    public Persona(int idPersona, String nombre, String apellidoPaterno, String apellidoMaterno, String genero, String domicilio, String telefono, String rfc) {
         this.idPersona = idPersona;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -30,7 +29,6 @@ public class Persona {
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.rfc = rfc;
-        this.usuario = usuario;
     }
 
     public int getIdPersona() {
@@ -95,14 +93,6 @@ public class Persona {
 
     public void setRfc(String rfc) {
         this.rfc = rfc;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
 }

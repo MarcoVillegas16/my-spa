@@ -17,27 +17,18 @@ public final class Cliente extends Persona {
     private String numeroUnico;
     private String correo;
     private int estatus;
+    private Usuario usuario;
 
     //Ya tiene el numero unico
-    public Cliente(int idCliente, String numeroUnico, String correo, int estatus, int idPersona, String nombre, String apellidoPaterno, String apellidoMaterno, String genero, String domicilio, String telefono, String rfc, Usuario usuario) {
-        super(idPersona, nombre, apellidoPaterno, apellidoMaterno, genero, domicilio, telefono, rfc, usuario);
+    public Cliente(int idCliente, String numeroUnico, String correo, int estatus, Usuario usuario, int idPersona, String nombre, String apellidoPaterno, String apellidoMaterno, String genero, String domicilio, String telefono, String rfc) {
+        super(idPersona, nombre, apellidoPaterno, apellidoMaterno, genero, domicilio, telefono, rfc);
         this.idCliente = idCliente;
         this.numeroUnico = numeroUnico;
         this.correo = correo;
         this.estatus = estatus;
-
+        this.usuario = usuario;
     }
 
-    //Generar numero unico
-    public Cliente(int idCliente, String correo, int estatus, int idPersona, String nombre, String apellidoPaterno, String apellidoMaterno, String genero, String domicilio, String telefono, String rfc, Usuario usuario) {
-        super(idPersona, nombre, apellidoPaterno, apellidoMaterno, genero, domicilio, telefono, rfc, usuario);
-        this.idCliente = idCliente;
-        this.correo = correo;
-        this.estatus = estatus;
-
-        //generarNumeroUnico();
-
-    }
 
     public int getIdCliente() {
         return idCliente;
@@ -69,6 +60,14 @@ public final class Cliente extends Persona {
 
     public void setEstatus(int estatus) {
         this.estatus = estatus;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
 //    protected void generarNumeroUnico() {
@@ -131,5 +130,4 @@ public final class Cliente extends Persona {
 //        return respuesta;
 //
 //    }
-
 }

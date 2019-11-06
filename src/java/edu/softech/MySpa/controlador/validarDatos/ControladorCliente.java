@@ -115,10 +115,10 @@ public class ControladorCliente {
 
         Usuario u = new Usuario(0, (String) datos.get(6), (String) datos.get(8),
                 "Cliente");
-        Cliente c = new Cliente(0, (String) datos.get(7), 1, 0, (String) datos.get(0),
-                (String) datos.get(1), (String) datos.get(2), (String) datos.get(3),
-                (String) datos.get(9), (String) datos.get(4), (String) datos.get(5),
-                u);
+        Cliente c = new Cliente(0, "numeroico", (String) datos.get(7), 1, u, 0,
+                (String) datos.get(0), (String) datos.get(1), (String) datos.get(2),
+                (String) datos.get(3), (String) datos.get(9), (String) datos.get(4),
+                (String) datos.get(5));
         switch (opcion) {
             case 1:
                 break;
@@ -134,7 +134,8 @@ public class ControladorCliente {
         boolean respuesta = false;
         Usuario u = new Usuario(0, (String) datos.get(1), "", "");
 
-        Cliente c = new Cliente(0, (String) datos.get(0), "", 0, 0, "", "", "", "", "", "", "", u);
+        Cliente c = new Cliente(0, (String) datos.get(0), "", 0, u, 0, "", "",
+                "", "", "", "", "");
 
         Cliente c1 = comC.buscarCliente(c, 1);
 
@@ -150,8 +151,7 @@ public class ControladorCliente {
     public Cliente buscarCliente(ArrayList datos, int opcion) throws Exception {
 
         Usuario u = new Usuario(0, (String) datos.get(0), (String) datos.get(1), "");
-        Cliente c = new Cliente(0, "", 0, 0, "", "", "", "", "", "", "", u);
-
+        Cliente c = new Cliente(0, "", "", 0, u, 0, "", "", "", "", "", "", "");
         c = comC.buscarCliente(c, opcion);
         u = c.getUsuario();
 
