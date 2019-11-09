@@ -37,17 +37,15 @@ public class ControladorCliente {
             if (validarDatosObligatorio(datos)) {
                 if (validarDatos(datos)) {
                     c = crearObjCliente(datos, opcion);
-
+                    c.setNumeroUnico("3");
                     switch (opcion) {
                         case 1:
                             c = comC.registrarCliente(c, 1);
                             break;
                         case 2:
-                            if (c.getNumeroUnico().length() == 15) {
-                                c = comC.actualizarCliente(c, 2);
-                            } else {
-                                return null;
-                            }
+
+                            c = comC.actualizarCliente(c, 2);
+
                             break;
                     }
 
@@ -115,7 +113,7 @@ public class ControladorCliente {
 
         Usuario u = new Usuario(0, (String) datos.get(6), (String) datos.get(8),
                 "Cliente");
-        
+
         //Sin numero unico
         Cliente c = new Cliente(0, (String) datos.get(7), 1, u, 0,
                 (String) datos.get(0), (String) datos.get(1), (String) datos.get(2),
@@ -139,6 +137,7 @@ public class ControladorCliente {
 
         Cliente c = new Cliente();
         c.setNumeroUnico((String) datos.get(0));
+        c.setUsuario(u);
 
         Cliente c1 = comC.buscarCliente(c, 1);
 
