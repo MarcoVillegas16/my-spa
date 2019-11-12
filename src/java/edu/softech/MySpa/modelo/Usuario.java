@@ -16,6 +16,10 @@ public class Usuario {
     private String contrasenia;
     private String rol;
 
+    public Usuario()
+    {
+    }
+
     public Usuario(int idUsuario, String nombreUsuario, String contrasenia, String rol) {
         this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
