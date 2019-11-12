@@ -20,6 +20,9 @@ public class Persona {
     private String telefono;
     private String rfc;
 
+    public Persona() {
+    }
+
     public Persona(int idPersona, String nombre, String apellidoPaterno, String apellidoMaterno, String genero, String domicilio, String telefono, String rfc) {
         this.idPersona = idPersona;
         this.nombre = nombre;
