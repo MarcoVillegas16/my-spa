@@ -19,9 +19,6 @@ public final class Cliente extends Persona {
     private int estatus;
     private Usuario usuario;
 
-    public Cliente() {
-    }
-
     //Ya tiene el numero unico
     public Cliente(int idCliente, String numeroUnico, String correo, int estatus, Usuario usuario, int idPersona, String nombre, String apellidoPaterno, String apellidoMaterno, String genero, String domicilio, String telefono, String rfc) {
         super(idPersona, nombre, apellidoPaterno, apellidoMaterno, genero, domicilio, telefono, rfc);
@@ -31,15 +28,7 @@ public final class Cliente extends Persona {
         this.estatus = estatus;
         this.usuario = usuario;
     }
-//Sin numero unico
 
-    public Cliente(int idCliente, String correo, int estatus, Usuario usuario, int idPersona, String nombre, String apellidoPaterno, String apellidoMaterno, String genero, String domicilio, String telefono, String rfc) {
-        super(idPersona, nombre, apellidoPaterno, apellidoMaterno, genero, domicilio, telefono, rfc);
-        this.idCliente = idCliente;
-        this.correo = correo;
-        this.estatus = estatus;
-        this.usuario = usuario;
-    }
 
     public int getIdCliente() {
         return idCliente;
