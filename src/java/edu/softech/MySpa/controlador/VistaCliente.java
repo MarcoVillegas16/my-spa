@@ -8,7 +8,6 @@ package edu.softech.MySpa.controlador;
 import com.google.gson.Gson;
 import edu.softech.MySpa.modelo.Cliente;
 import edu.softech.MySpa.controlador.validarDatos.ControladorCliente;
-import edu.softech.MySpa.modelo.Usuario;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
