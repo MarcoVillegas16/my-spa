@@ -150,7 +150,7 @@ public class VistaCliente extends Application {
     }
 
     @GET
-    @Path("clientes")
+    @Path("listado")
     @Produces(MediaType.APPLICATION_JSON)
     public Response listarClientes() {
 
