@@ -1,10 +1,10 @@
 package edu.softech.MySpa.controlador;
 
+// Importes necesarios
 import com.google.gson.Gson;
 import edu.softech.MySpa.baseDatos.comandos.comandosProducto;
 import edu.softech.MySpa.modelo.Producto;
 import java.sql.SQLException;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
@@ -34,7 +34,7 @@ public class VistaProducto extends Application {
     String respuesta;
 
     /**
-     *
+     * Devuelve una tupla de la tabla Producto
      * @param idProducto
      * @return
      */
@@ -54,7 +54,7 @@ public class VistaProducto extends Application {
             // Manda el objeto y la opcion a evaluar, y crea un JSON de la respuesta
             respuesta = new Gson().toJson(cmProductos.buscarProducto(producto));
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            respuesta = new Gson().toJson(ex.getMessage());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -64,7 +64,7 @@ public class VistaProducto extends Application {
     }
 
     /**
-     *
+     * Devuleve todos los registros de la tabla Producto
      * @return
      */
     @GET
@@ -75,8 +75,10 @@ public class VistaProducto extends Application {
         // Obtiene todos los productos de la base de datos, y crea un JSON con ellos
         try {
             respuesta = new Gson().toJson(cmProductos.buscarProductos());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException sqlex) {
+            respuesta = new Gson().toJson(sqlex.getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
         // Retorna el JSON
@@ -84,7 +86,8 @@ public class VistaProducto extends Application {
     }
 
     /**
-     *
+     * Inserta un nuevo registro a la base de datos. Para ello, crea
+     * un nuevo objeto producto.
      * @param nombre
      * @param marca
      * @param precioUso
@@ -96,8 +99,6 @@ public class VistaProducto extends Application {
             @QueryParam("marca") String marca,
             @QueryParam("precioUso") String precioUso) {
 
-        // Inserta un nuevo registro a la base de datos. Para ello, crea
-        // un nuevo objeto producto
         // Se crea un producto al cual se le empataran 3 de sus 5 atributos
         // Esto porque @idProducto y @estatus se autogeneraran en la base de datos
         producto = new Producto();
@@ -109,8 +110,10 @@ public class VistaProducto extends Application {
             // Manda @producto a evaluar, y crea un JSON de la respuesta
             respuesta = new Gson().toJson(cmProductos.registarProducto(producto));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException sqlex) {
+            respuesta = new Gson().toJson(sqlex.getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
         return Response.status(Response.Status.OK).entity(respuesta).build();
@@ -118,7 +121,7 @@ public class VistaProducto extends Application {
     }
 
     /**
-     *
+     * Actualiza un registro Producto determinado.
      * @param idProducto
      * @param nombre
      * @param marca
@@ -134,30 +137,35 @@ public class VistaProducto extends Application {
             @QueryParam("estatus") String estatus,
             @QueryParam("precioUso") String precioUso) {
 
-        // Actualiza un registro Producto determinado.
         // Se crea el producto actualizado
-        producto = new Producto(Integer.parseInt(idProducto), nombre, marca,
-                Integer.parseInt(estatus), Float.parseFloat(precioUso));
+        producto = new Producto(Integer.parseInt(idProducto),
+                nombre,
+                marca,
+                Integer.parseInt(estatus),
+                Float.parseFloat(precioUso));
 
         try {
             // Manda @producto a evaluar, y crea un JSON de la respuesta
-            if(cmProductos.modificarProducto(producto))
+            if (cmProductos.modificarProducto(producto)) {
                 respuesta = new Gson().toJson(producto);
-            else 
+            } else {
                 respuesta = null;
+            }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException sqlex) {
+            respuesta = new Gson().toJson(sqlex.getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
         return Response.status(Response.Status.OK).entity(respuesta).build();
 
     }
-    
+
     /**
-     * 
+     *
      * @param idProducto0
-     * @return 
+     * @return
      */
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
@@ -169,10 +177,9 @@ public class VistaProducto extends Application {
         Enviara un objeto Producto con el atributo @idProducto para buscar el
         registro con el mismo ID, y cambiar su estatus
          */
-        
         // Crea un objeto Producto al que se le empatara el atributo @idProducto
         producto = new Producto();
-        
+
         producto.setIdProducto(Integer.parseInt(idProducto0));
 
         try {
@@ -180,6 +187,8 @@ public class VistaProducto extends Application {
             // Manda el objeto a evaluar y crea un JSON de la respuesta
             respuesta = new Gson().toJson(cmProductos.borrarProducto(producto));
 
+        } catch (SQLException sqlex) {
+            respuesta = new Gson().toJson(sqlex.getMessage());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
