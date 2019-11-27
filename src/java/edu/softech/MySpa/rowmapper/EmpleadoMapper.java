@@ -5,9 +5,10 @@
  */
 package edu.softech.MySpa.rowmapper;
 
-import edu.softech.MySpa.jdbc_template.core.interfaces.RowMapper;
+
 import edu.softech.MySpa.modelo.Empleado;
 import edu.softech.MySpa.modelo.Usuario;
+import edu.utleon.esml.jdbctemplate.utilities.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
