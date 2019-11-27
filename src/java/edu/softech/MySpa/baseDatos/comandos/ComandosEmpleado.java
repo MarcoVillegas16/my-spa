@@ -11,7 +11,7 @@ import edu.softech.MySpa.jdbc_template.core.interfaces.CRUD;
 import edu.softech.MySpa.jdbc_template.core.interfaces.RowMapper;
 import edu.softech.MySpa.modelo.Empleado;
 import edu.softech.MySpa.modelo.Usuario;
-import edu.softech.MySpa.modelo.mapper.EmpleadoMapper;
+import edu.softech.MySpa.rowmapper.EmpleadoMapper;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
