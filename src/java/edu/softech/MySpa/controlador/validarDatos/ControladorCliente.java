@@ -43,11 +43,7 @@ public class ControladorCliente {
                             c = comC.registrarCliente(c, 1);
                             break;
                         case 2:
-                            if (c.getNumeroUnico().length() == 15) {
-                                c = comC.actualizarCliente(c, 2);
-                            } else {
-                                return null;
-                            }
+                            c = comC.actualizarCliente(c, 2);
                             break;
                     }
 
