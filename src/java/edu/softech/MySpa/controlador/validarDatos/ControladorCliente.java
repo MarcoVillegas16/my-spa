@@ -9,7 +9,9 @@ import edu.softech.MySpa.baseDatos.comandos.comandosCliente;
 import edu.softech.MySpa.modelo.Cliente;
 import edu.softech.MySpa.modelo.Usuario;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -89,7 +91,7 @@ public class ControladorCliente {
         if (((String) datos.get(2)).length() <= 64) {//Apellido materno
             if (((String) datos.get(3)).length() <= 2) {//genero
                 if (((String) datos.get(4)).length() <= 25) {//telefono
-                    if (((String) datos.get(5)).length() == 13 || ((String) datos.get(5)).length() == 0) {//rfc
+                    if (((String) datos.get(5)).length() > 4) {//rfc
                         if (((String) datos.get(7)).length() <= 200) {//correo
                             matcher = pattern.matcher((String) datos.get(7));
                             if (matcher.find()) {
@@ -107,11 +109,17 @@ public class ControladorCliente {
         return false;
     }
 
+    public String generarNUC(ArrayList datos) {
+        Date d = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        return datos.get(5).toString().toUpperCase().substring(0, 4) + formatter.format(d);
+    }
+
     public Cliente crearObjCliente(ArrayList datos, int opcion) {
 
         Usuario u = new Usuario(0, (String) datos.get(6), (String) datos.get(8),
                 "Cliente");
-        Cliente c = new Cliente(0, "numeroico", (String) datos.get(7), 1, u, 0,
+        Cliente c = new Cliente(0, generarNUC(datos), (String) datos.get(7), 1, u, 0,
                 (String) datos.get(0), (String) datos.get(1), (String) datos.get(2),
                 (String) datos.get(3), (String) datos.get(9), (String) datos.get(4),
                 (String) datos.get(5));
