@@ -4,7 +4,8 @@ package edu.softech.MySpa.controlador;
 import com.google.gson.Gson;
 import edu.softech.MySpa.baseDatos.comandos.comandosProducto;
 import edu.softech.MySpa.modelo.Producto;
-import java.sql.SQLException;
+import edu.softech.MySpa.modelo.Producto_Sucursal;
+import edu.softech.MySpa.modelo.Sucursal;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
@@ -24,8 +25,14 @@ import javax.ws.rs.core.Response;
 @Path("producto")
 public class VistaProducto extends Application {
 
-    // Objeto necesario para manipular otros objeto Producto
+    // Objeto necesario para manipular objetos Producto.
     Producto producto;
+    
+    // Objeto necesario para manipular la relación Producto - Sucursal.
+    Producto_Sucursal producto_sucursal;
+    
+    // Objeto necesario para manipular objetos Sucursal.
+    Sucursal sucursal;
 
     // Objeto controlador para los comandos Producto
     comandosProducto cmProductos = new comandosProducto();
@@ -34,27 +41,29 @@ public class VistaProducto extends Application {
     String respuesta;
 
     /**
-     * Devuelve una tupla de la tabla Producto
-     * @param idProducto
-     * @return
+     * Busca y devuelve los datos del producto (producto - sucursal)
+     * cuyo idProducto se ingrese. 
+     * @param idProducto del producto
+     * @return JSON con los datos del producto
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerProducto(@QueryParam("idProducto") String idProducto) {
 
-        // Obtiene un registro producto de la base de datos, y crea un JSON con el.
-        // Crea un objeto Producto y lo empata dependiendo de que criterio
-        // se uso para buscalo.
+        // Crea un objeto Producto y le empata su atributo idProducto
         producto = new Producto();
-
-        // Da el atributo idProducto al objeto Producto
         producto.setIdProducto(Integer.parseInt(idProducto));
+        
+        // Crea un objeto Sucursal, necesario para el objeto Producto_Sucursal
+        sucursal = new Sucursal();
+        
+        // Crea un objeto Producto_Sucursal, necesario para la busqueda.
+        // Stock se declara como 0 para eviar conflictos con el constructor.
+        producto_sucursal = new Producto_Sucursal(sucursal, producto, 0);
 
         try {
             // Manda el objeto y la opcion a evaluar, y crea un JSON de la respuesta
-            respuesta = new Gson().toJson(cmProductos.buscarProducto(producto));
-        } catch (SQLException ex) {
-            respuesta = new Gson().toJson(ex.getMessage());
+            respuesta = new Gson().toJson(cmProductos.buscarProducto(producto_sucursal));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -64,8 +73,8 @@ public class VistaProducto extends Application {
     }
 
     /**
-     * Devuleve todos los registros de la tabla Producto
-     * @return
+     * Devuleve todos los productos.
+     * @return JSON con objetos Producto_Sucursal
      */
     @GET
     @Path("listado")
@@ -75,8 +84,6 @@ public class VistaProducto extends Application {
         // Obtiene todos los productos de la base de datos, y crea un JSON con ellos
         try {
             respuesta = new Gson().toJson(cmProductos.buscarProductos());
-        } catch (SQLException sqlex) {
-            respuesta = new Gson().toJson(sqlex.getMessage());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -86,32 +93,41 @@ public class VistaProducto extends Application {
     }
 
     /**
-     * Inserta un nuevo registro a la base de datos. Para ello, crea
-     * un nuevo objeto producto.
-     * @param nombre
-     * @param marca
-     * @param precioUso
-     * @return
+     * Inserta un nuevo registro a la base de datos.
+     * @param nombre del producto.
+     * @param marca del producto.
+     * @param precioUso del producto.
+     * @param idSucursal de la sucursal.
+     * @param stock (cantidad) del producyo.
+     * @return Un JSON con el objeto creado.
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearProducto(@QueryParam("nombre") String nombre,
             @QueryParam("marca") String marca,
-            @QueryParam("precioUso") String precioUso) {
+            @QueryParam("precioUso") String precioUso,
+            @QueryParam("idSucursal") String idSucursal,
+            @QueryParam("stock") String stock) {
 
-        // Se crea un producto al cual se le empataran 3 de sus 5 atributos
-        // Esto porque @idProducto y @estatus se autogeneraran en la base de datos
+        // Se crea un producto al cual se le empataran 3 de sus 5 atributos (nombre, marca y precioUso)
         producto = new Producto();
         producto.setNombre(nombre);
         producto.setMarca(marca);
         producto.setPrecioUso(Float.parseFloat(precioUso));
+        
+        // Se crea un objeto sucursal el cual empatara su atributo idSucursal.
+        sucursal = new Sucursal();
+        sucursal.setIdSucursal(Integer.parseInt(idSucursal));
+        
+        // Se crea un objeto que relaciona producto - sucursal, el cual tambien
+        // contendra el stock
+        producto_sucursal = new Producto_Sucursal(sucursal,
+                producto,
+                Integer.parseInt(stock));
 
         try {
-            // Manda @producto a evaluar, y crea un JSON de la respuesta
-            respuesta = new Gson().toJson(cmProductos.registarProducto(producto));
-
-        } catch (SQLException sqlex) {
-            respuesta = new Gson().toJson(sqlex.getMessage());
+            // Registra el producto y crea un JSON de la respuesta de la BD.
+            respuesta = new Gson().toJson(cmProductos.registarProducto(producto_sucursal));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -125,8 +141,9 @@ public class VistaProducto extends Application {
      * @param idProducto
      * @param nombre
      * @param marca
-     * @param estatus
      * @param precioUso
+     * @param idSucursal
+     * @param stock
      * @return
      */
     @PUT
@@ -134,26 +151,36 @@ public class VistaProducto extends Application {
     public Response modificarProducto(@QueryParam("idProducto") String idProducto,
             @QueryParam("nombre") String nombre,
             @QueryParam("marca") String marca,
-            @QueryParam("estatus") String estatus,
-            @QueryParam("precioUso") String precioUso) {
+            @QueryParam("precioUso") String precioUso,
+            @QueryParam("idSucursal") String idSucursal,
+            @QueryParam("stock") String stock) {
 
-        // Se crea el producto actualizado
-        producto = new Producto(Integer.parseInt(idProducto),
-                nombre,
-                marca,
-                Integer.parseInt(estatus),
-                Float.parseFloat(precioUso));
+        // Se crea el producto y se le dan sus atributos
+        producto = new Producto();
+        producto.setIdProducto(Integer.parseInt(idProducto));
+        producto.setNombre(nombre);
+        producto.setMarca(marca);
+        producto.setPrecioUso(Float.parseFloat(precioUso));
+        
+        // Se crea un objeto Sucursal con la nueva idSucursal.
+        sucursal = new Sucursal();
+        sucursal.setIdSucursal(Integer.parseInt(idSucursal));
+        
+        // Se crea el objeto Producto_Sucursal que contnedra a Producto
+        // y Sucursal, y que sera evaludado.
+        // Stock se declara como 0 para eviar conflictos con el constructor.
+        producto_sucursal = new Producto_Sucursal(sucursal,
+                producto,
+                Integer.parseInt(stock));
 
         try {
             // Manda @producto a evaluar, y crea un JSON de la respuesta
-            if (cmProductos.modificarProducto(producto)) {
-                respuesta = new Gson().toJson(producto);
+            if (cmProductos.modificarProducto(producto_sucursal)) {
+                respuesta = new Gson().toJson(producto_sucursal);
             } else {
                 respuesta = null;
+                respuesta = new Gson().toJson(respuesta);
             }
-
-        } catch (SQLException sqlex) {
-            respuesta = new Gson().toJson(sqlex.getMessage());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -163,32 +190,33 @@ public class VistaProducto extends Application {
     }
 
     /**
-     *
-     * @param idProducto0
+     * Cambia el atributo @estatus de un registro Producto a '2' (eliminado)
+     * en la base de datos para indicar que esta fuera de servicio.
+     * @param idProducto
      * @return
      */
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public Response borrarProducto(@QueryParam("idProducto0") String idProducto0) {
+    public Response borrarProducto(@QueryParam("idProducto") String idProducto) {
 
-        /*
-        Cambia el atributo @estatus de un registro Producto a '2' (eliminado)
-        en la base de datos para indicar que esta fuera de servicio.
-        Enviara un objeto Producto con el atributo @idProducto para buscar el
-        registro con el mismo ID, y cambiar su estatus
-         */
-        // Crea un objeto Producto al que se le empatara el atributo @idProducto
+        // Crea un objeto Producto al que se le empatara el idProducto
         producto = new Producto();
-
-        producto.setIdProducto(Integer.parseInt(idProducto0));
+        producto.setIdProducto(Integer.parseInt(idProducto));
+        
+        // Crea un objeto Sucursal, necesario para la evaluación.
+        sucursal = new Sucursal();
+        
+        // Crea un objeto Producto_Sucursal, necesario para la evaluación.
+        // Stock se declara como 0 para eviar conflictos con el constructor.
+        producto_sucursal = new Producto_Sucursal(sucursal, producto, 0);
 
         try {
-
             // Manda el objeto a evaluar y crea un JSON de la respuesta
-            respuesta = new Gson().toJson(cmProductos.borrarProducto(producto));
-
-        } catch (SQLException sqlex) {
-            respuesta = new Gson().toJson(sqlex.getMessage());
+            if(cmProductos.borrarProducto(producto_sucursal) != null) {
+                respuesta = new Gson().toJson(cmProductos.borrarProducto(producto_sucursal));
+            } else {
+                respuesta = new Gson().toJson(null);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

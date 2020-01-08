@@ -25,6 +25,7 @@ public class conexionBasesDatos {
         String usuario = "root";
         String contrasenia = "root";
         String ubicacion = "jdbc:mysql://127.0.0.1:3306/myspa?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+//        String ubicacion = "jdbc:mysql://127.0.0.1:3306/myspa?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 
         // conn=DriverManager.getConnection(ubicacion, usuario, contrasenia);
         conn = DriverManager.getConnection(ubicacion, usuario, contrasenia);
