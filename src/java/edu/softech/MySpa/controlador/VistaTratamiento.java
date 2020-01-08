@@ -91,6 +91,7 @@ public class VistaTratamiento extends Application {
         @descripcion y @costo. Los atributos @idTratamiento y @estatus
         se autoasignaran en la base de datos.
          */
+        tratamiento = new Tratamiento();
         tratamiento.setNombre(nombre);
         tratamiento.setDescripcion(descripcion);
         tratamiento.setCosto(Float.parseFloat(costo));
@@ -111,21 +112,19 @@ public class VistaTratamiento extends Application {
     public Response modificarTratamiento(@QueryParam("idTratamiento") String idTratamiento,
             @QueryParam("nombre") String nombre,
             @QueryParam("descripcion") String descripcion,
-            @QueryParam("costo") String costo,
-            @QueryParam("estatus") String estatus) {
-
-        // Modifica los atributos de un registro Tratamiento determinado
-        // Se crea el producto actualizado
-        tratamiento = new Tratamiento(Integer.parseInt(idTratamiento),
-                nombre,
-                descripcion,
-                Float.parseFloat(costo),
-                Integer.parseInt(estatus));
+            @QueryParam("costo") String costo) {
+        
+        // Se crea el producto y se le asignan sus atributos
+        tratamiento = new Tratamiento();
+        tratamiento.setIdTratamiento(Integer.parseInt(idTratamiento));
+        tratamiento.setNombre(nombre);
+        tratamiento.setDescripcion(descripcion);
+        tratamiento.setCosto(Float.parseFloat(costo));
 
         try {
             // Manda @tratamiento a evaluar, y crea un JSON de la respuesta
             respuesta = (cmTratamiento.modificarTratamiento(tratamiento))
-                    ? new Gson().toJson(tratamiento) : null;
+                    ? new Gson().toJson(tratamiento) :  new Gson().toJson(null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -135,9 +134,8 @@ public class VistaTratamiento extends Application {
     }
 
     @DELETE
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response borrarProducto(@QueryParam("idTramaiento0") String idTramaiento0) {
+    public Response borrarProducto(@QueryParam("idTratamiento") String idTratamiento) {
 
         /*
         Cambia el atributo @estatus de un registro Tratamiento a '2' (eliminado)
@@ -148,7 +146,7 @@ public class VistaTratamiento extends Application {
          */
         // Crea el objeto y le asigna el atributo.
         tratamiento = new Tratamiento();
-        tratamiento.setIdTratamiento(Integer.parseInt(idTramaiento0));
+        tratamiento.setIdTratamiento(Integer.parseInt(idTratamiento));
 
         try {
             // Manda @tratamiento a evaluar, y crea un JSON de la respuesta

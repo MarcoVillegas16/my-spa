@@ -6,7 +6,6 @@ import edu.softech.MySpa.modelo.Tratamiento;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Types;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -97,11 +96,11 @@ public class comandosTratamiento {
 
         // Llama al procedimiento almacenado para modificar un tratamiento
         /*
-            1. IN idTratamiento INT
-            2. IN nombre        VARCHAR
-            3. IN descripcion   VARCHAR
-            4. IN costo         FLOAT
-            5. IN estatus       INT
+            1. IN   idTratamiento   INT
+            2. IN   nombre          VARCHAR
+            3. IN   descripcion     VARCHAR
+            4. IN   costo           FLOAT
+            5. OUT  respuesta       BOOLEAN
          */
         query = "CALL modificarTratamiento(?, ?, ?, ?, ?)";
 
@@ -115,11 +114,22 @@ public class comandosTratamiento {
         cs.setString("var_nombre", tratamiento.getNombre());
         cs.setString("var_descripcion", tratamiento.getDescripcion());
         cs.setFloat("var_costo", tratamiento.getCosto());
-        cs.setInt("var_estatus", tratamiento.getEstatus());
+        
+        // Preparamos el parametro de salida al query.
+        // Indicara sí se realizo la actualización con exito.
+        cs.registerOutParameter("respuesta", Types.BOOLEAN);
 
-        // Ejecuta el query y devuleve el resultado de su ejecución
-        // 'true' si lo hizo, y 'false' si no.
-        return cs.execute();
+        // Ejecutamos el query
+        cs.execute();
+        
+        // Obtenemos la respueta
+        boolean respuesta = cs.getBoolean("respuesta");
+        
+        // Finalizamos la conexion
+        conn.Desconectar();
+        
+        // Devolvemos la respuesta
+        return respuesta;
     }
 
     /**
@@ -138,7 +148,7 @@ public class comandosTratamiento {
             4. OUT costo        FLOAT
             5. OUT estatus      INT
          */
-        query = "CALL borrarTratamiento(?, ?, ?, ?, ?)";
+        query = "CALL borrarTratamiento(?, ?, ?, ?, ?, ?) ";
 
         // Conectamo a la base de datos
         conn.Conectar();
@@ -153,16 +163,24 @@ public class comandosTratamiento {
         cs.registerOutParameter("var_descripcion", Types.VARCHAR);
         cs.registerOutParameter("var_costo", Types.FLOAT);
         cs.registerOutParameter("var_estatus", Types.INTEGER);
+        cs.registerOutParameter("respuesta", Types.BOOLEAN);
 
         // Ejecutamos el query
-        if (cs.execute()) {
+        cs.execute();
+        
+        //
+        boolean respuesta = cs.getBoolean("respuesta");
+        
+        if (respuesta) {
             // Obtenemos los parametros de salida y los empatamos al tratamiento
             tratamiento.setNombre(cs.getString("var_nombre"));
             tratamiento.setDescripcion(cs.getString("var_descripcion"));
             tratamiento.setCosto(cs.getFloat("var_costo"));
             tratamiento.setEstatus(cs.getInt("var_estatus"));
         } else {
+            // Finalizamos la conexion
             conn.Desconectar();
+            // Retornamos 'null' porque no se pudo hacer la eliminacion.
             return null;
         }
         // Finalizamos la conexion
@@ -182,7 +200,7 @@ public class comandosTratamiento {
     public Tratamiento buscarTratamiento(Tratamiento tratamiento) throws Exception {
 
         // Hacemos una consulta filtrada de la vista de los tratamientos
-        query = "SELECT * FROM v_tratamientos WHERE ID_Tratamiento = ?";
+        query = "SELECT * FROM v_tratamiento WHERE idTratamiento = ?";
 
         // Conectamo a la base de datos
         conn.Conectar();
@@ -197,10 +215,10 @@ public class comandosTratamiento {
 
         // Obtenemos los campos y los asignamos al objeto
         if (rs.next()) {
-            tratamiento.setNombre(rs.getString("Nombre"));
-            tratamiento.setDescripcion(rs.getString("Descripcion"));
-            tratamiento.setCosto(rs.getFloat("Costo"));
-            tratamiento.setIdTratamiento(rs.getInt("Estatus"));
+            tratamiento.setNombre(rs.getString("nombre"));
+            tratamiento.setDescripcion(rs.getString("descripcion"));
+            tratamiento.setCosto(rs.getFloat("costo"));
+            tratamiento.setEstatus(rs.getInt("estatus"));
         } else {
             // Se desconecta de la base de datos
             conn.Desconectar();
@@ -228,7 +246,7 @@ public class comandosTratamiento {
         Queue<Tratamiento> tratamientos = new LinkedList<>();
 
         // Hacemos una cosnulta a la vista de tratamientos
-        query = "SELECT * FROM v_tratamientos";
+        query = "SELECT * FROM v_tratamiento";
 
         // Nos conectamos a la base de datos, preparamos y ejecutamos el query
         conn.Conectar();
@@ -246,11 +264,12 @@ public class comandosTratamiento {
 
         while (rs.next()) {
             aux = new Tratamiento(
-                    rs.getInt("ID_Tratamiento"),
-                    rs.getString("Nombre"),
-                    rs.getString("Descripcion"),
-                    rs.getFloat("Costo"),
-                    rs.getInt("Estatus"));
+                    rs.getInt("idTratamiento"),
+                    rs.getString("nombre"),
+                    rs.getString("descripcion"),
+                    rs.getFloat("costo"),
+                    rs.getInt("estatus"));
+            tratamientos.add(aux);
         }
 
         // Finalmente, nos desconectamos de la base de datos y devolvemos la lista
